@@ -1,5 +1,5 @@
-from app import app
-from models import db, Coach, Client, Session, CoachClient
+from .app import app
+from .models import db, Coach, Client, Session, CoachClient
 import os
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash
