@@ -45,3 +45,4 @@ wcwidth==0.2.13
 werkzeug==2.2.2; python_version >= '3.7'
 zipp==3.20.1; python_version >= '3.8'
 gunicorn==20.1.0
+psycopg2-binary==2.9.6
