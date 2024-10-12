@@ -5,6 +5,10 @@ function Home() {
   const [coaches, setCoaches] = useState([]);
   const [showCoaches, setShowCoaches] = useState(false);
 
+  const FRONTEND_URL = process.env.REACT_APP_FRONTEND_URL;
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+
   useEffect(() => {
     // Fetch the coaches from your backend API
     fetch('http://127.0.0.1:5000/coaches')
@@ -19,12 +23,12 @@ function Home() {
 
   // Mapping of coach names to their respective image paths
   const coachImages = {
-    "Matilda Hubert": "/images/coaches/1.jpeg",
-    "Ricky Milton": "/images/coaches/2.jpeg",
-    "Sam Morton": "/images/coaches/3.jpeg",
-    "Denise Lawson": "/images/coaches/4.jpeg",
-    "Natalie Ventura": "/images/coaches/5.jpeg",
-    "Veronica Bolton": "/images/coaches/6.jpeg",
+    "Matilda Hubert": `${FRONTEND_URL}images/coaches/1.jpeg`,
+    "Ricky Milton": `${FRONTEND_URL}images/coaches/2.jpeg`,
+    "Sam Morton": `${FRONTEND_URL}images/coaches/3.jpeg`,
+    "Denise Lawson": `${FRONTEND_URL}images/coaches/4.jpeg`,
+    "Natalie Ventura": `${FRONTEND_URL}images/coaches/5.jpeg`,
+    "Veronica Bolton": `${FRONTEND_URL}images/coaches/6.jpeg`,
   };
 
   return (
