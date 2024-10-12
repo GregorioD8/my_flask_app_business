@@ -3,6 +3,8 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 
 const ClientsForm = ({ onSubmitSuccess }) => {
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -13,7 +15,7 @@ const ClientsForm = ({ onSubmitSuccess }) => {
       goals: yup.string().required("Goals are required"),
     }),
     onSubmit: (values) => {
-      fetch("http://127.0.0.1:5000/clients", {
+      fetch(`${BACKEND_URL}/clients`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

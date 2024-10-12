@@ -10,22 +10,25 @@ import Navbar from "./Navbar";
 import PrivateRoute from "./PrivateRoute";
 
 function App() {
+
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
   const [clients, setClients] = useState([]);
   const [coaches, setCoaches] = useState([]);
   const [sessions, setSessions] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/clients")
+    fetch(`${BACKEND_URL}/clients`)
       .then(response => response.json())
       .then(data => setClients(data))
       .catch(error => console.error("Error fetching clients:", error));
 
-    fetch("http://127.0.0.1:5000/coaches")
+    fetch(`${BACKEND_URL}/coaches`)
       .then(response => response.json())
       .then(data => setCoaches(data))
       .catch(error => console.error("Error fetching coaches:", error));
 
-    fetch("http://127.0.0.1:5000/sessions")
+    fetch(`${BACKEND_URL}/sessions`)
       .then(response => response.json())
       .then(data => setSessions(data))
       .catch(error => console.error("Error fetching sessions:", error));

@@ -11,7 +11,7 @@ function Home() {
 
   useEffect(() => {
     // Fetch the coaches from your backend API
-    fetch('http://127.0.0.1:5000/coaches')
+    fetch(`${BACKEND_URL}/coaches`)
       .then(response => response.json())
       .then(data => setCoaches(data))
       .catch(error => console.error('Error fetching coaches:', error));
@@ -23,12 +23,12 @@ function Home() {
 
   // Mapping of coach names to their respective image paths
   const coachImages = {
-    "Matilda Hubert": `${FRONTEND_URL}images/coaches/1.jpeg`,
-    "Ricky Milton": `${FRONTEND_URL}images/coaches/2.jpeg`,
-    "Sam Morton": `${FRONTEND_URL}images/coaches/3.jpeg`,
-    "Denise Lawson": `${FRONTEND_URL}images/coaches/4.jpeg`,
-    "Natalie Ventura": `${FRONTEND_URL}images/coaches/5.jpeg`,
-    "Veronica Bolton": `${FRONTEND_URL}images/coaches/6.jpeg`,
+    "Matilda Hubert": `${FRONTEND_URL}/images/coaches/1.jpeg`,
+    "Ricky Milton": `${FRONTEND_URL}/images/coaches/2.jpeg`,
+    "Sam Morton": `${FRONTEND_URL}/images/coaches/3.jpeg`,
+    "Denise Lawson": `${FRONTEND_URL}/images/coaches/4.jpeg`,
+    "Natalie Ventura": `${FRONTEND_URL}/images/coaches/5.jpeg`,
+    "Veronica Bolton": `${FRONTEND_URL}/images/coaches/6.jpeg`,
   };
 
   return (
@@ -55,7 +55,7 @@ function Home() {
                 <div key={coach.id} className="col-md-4">
                   <div className="card mb-4">
                     <img
-                      src={coachImages[coach.name] || "/images/coaches/default.jpeg"} // Use mapped image or fallback
+                      src={coachImages[coach.name] || `${FRONTEND_URL}/images/coaches/1.jpeg`} // Use mapped image or fallback
                       alt={coach.name}
                       className="card-img-top"
                       style={{ objectFit: "cover", height: "200px", width: "100%" }}

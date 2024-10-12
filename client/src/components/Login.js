@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 
 function Login() {
+    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const history = useHistory();
@@ -11,7 +12,7 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Send login data to the backend
-        fetch('http://127.0.0.1:5000/login', {
+        fetch(`${BACKEND_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
