@@ -12,7 +12,7 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SECRET_KEY'] = os.urandom(24)
 app.json.compact = False
 
 db.init_app(app)
@@ -43,7 +43,7 @@ class Clients(Resource):
             return {'error': 'Bad request', 'message': str(e)}, 400
 
     def post(self):
-        try:
+        try: 
             new_client = Client(
                 name=request.json['name'],
                 goals=request.json['goals']
