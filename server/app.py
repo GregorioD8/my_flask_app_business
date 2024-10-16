@@ -286,7 +286,7 @@ def login():
 
     return jsonify({'message': 'Invalid credentials'}), 401
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 function Sessions() {
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   const [sessions, setSessions] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/sessions")
+    fetch(`${BACKEND_URL}/sessions`)
     .then(response => response.json())
     .then(data => setSessions(Array.isArray(data) ? data : []))
     .catch(error => {

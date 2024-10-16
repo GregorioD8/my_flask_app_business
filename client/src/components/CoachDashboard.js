@@ -5,6 +5,7 @@ import Calendar from "./Calendar";
 import MockPaymentForm from "./MockPaymentForm";
 
 const CoachDashboard = () => {
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   const { coachId } = useContext(AuthContext); // Get the logged-in coach's ID
   const [sessions, setSessions] = useState([]);
   const [clients, setClients] = useState([]);
@@ -16,15 +17,15 @@ const CoachDashboard = () => {
   useEffect(() => {
     if (coachId) {
       // Fetch clients who have scheduled sessions with the logged-in coach
-      fetch(`http://127.0.0.1:5000/coaches/${coachId}/clients_with_sessions`)
+      fetch(`${BACKEND_URL}/coaches/${coachId}/clients_with_sessions`)
         .then((res) => res.json())
         .then((data) => setClients(data))
         .catch((error) => console.error("Error fetching clients:", error));
 
       // Fetch sessions for the logged-in coach (with or without selected client)
       const url = selectedClient
-        ? `http://127.0.0.1:5000/coaches/${coachId}/sessions?client_id=${selectedClient}`
-        : `http://127.0.0.1:5000/coaches/${coachId}/sessions`;
+        ? `${BACKEND_URL}/coaches/${coachId}/sessions?client_id=${selectedClient}`
+        : `${BACKEND_URL}/coaches/${coachId}/sessions`;
 
       fetch(url)
         .then((res) => res.json())
@@ -43,7 +44,7 @@ const CoachDashboard = () => {
       alert("Notes cannot be empty.");
       return;
     }
-    fetch(`http://127.0.0.1:5000/sessions/${sessionId}`, {
+    fetch(`${BACKEND_URL}/sessions/${sessionId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -55,7 +56,7 @@ const CoachDashboard = () => {
   };
 
   const handleDeleteSession = (sessionId) => {
-    fetch(`http://127.0.0.1:5000/sessions/${sessionId}`, {
+    fetch(`${BACKEND_URL}/sessions/${sessionId}`, {
       method: "DELETE",
     }).then((res) => {
       if (res.status === 204) {
@@ -72,7 +73,7 @@ const CoachDashboard = () => {
   };
 
   const handlePaymentSubmit = (sessionId) => {
-    fetch(`http://127.0.0.1:5000/sessions/${sessionId}/pay`, {
+    fetch(`${BACKEND_URL}/sessions/${sessionId}/pay`, {
       method: "POST",
     })
       .then((res) => {

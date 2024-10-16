@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const SessionForm = ({ onSubmitSuccess, selectedCoach, clients }) => {
   const formSchema = yup.object().shape({
     client_id: yup.string().required("Must select a client"),
@@ -37,7 +37,7 @@ const SessionForm = ({ onSubmitSuccess, selectedCoach, clients }) => {
       const time = `${hour.toString().padStart(2, "0")}:00:00`;
       const dateTime = `${values.date} ${time}`;
 
-      fetch("http://127.0.0.1:5000/sessions", {
+      fetch(`${BACKEND_URL}/sessions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

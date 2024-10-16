@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 
 function CoachesForm({ onSubmitSuccess }) {
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   const formSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
     specialization: yup.string().required("Specialization is required"),
@@ -15,7 +16,7 @@ function CoachesForm({ onSubmitSuccess }) {
     },
     validationSchema: formSchema,
     onSubmit: (values) => {
-      fetch("http://127.0.0.1:5000/coaches", {
+      fetch(`${BACKEND_URL}/coaches`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
