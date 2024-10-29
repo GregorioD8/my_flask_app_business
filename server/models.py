@@ -1,22 +1,11 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy import Enum
+from enum import Enum as PyEnum
 from .config import db
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import MetaData
 from sqlalchemy.orm import validates
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-
-convention = {
-    "ix": "ix_%(column_0_label)s",
-    "uq": "uq_%(table_name)s_%(column_0_name)s",
-    "ck": "ck_%(table_name)s_%(constraint_name)s",
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-    "pk": "pk_%(table_name)s"
-}
-
-metadata = MetaData(naming_convention=convention)
-db = SQLAlchemy(metadata=metadata)
 
 class Coach(db.Model, SerializerMixin):
     __tablename__ = 'coaches'
@@ -26,10 +15,11 @@ class Coach(db.Model, SerializerMixin):
     username = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.String, nullable=False)
     
-    sessions = db.relationship('Session', cascade='all,delete', backref='coach')
-    clients = association_proxy('coach_clients', 'client')
+    sessions = db.relationship('Session', cascade='all,delete', backref='coach', lazy='dynamic')
+    client_agreements = db.relationship('ClientAgreement', back_populates='coach', lazy='dynamic')
+    clients = association_proxy('client_agreements', 'client')
 
-    serialize_rules = ('-sessions.coach', '-coach_clients.coach')
+    serialize_rules = ('-sessions.coach', '-client_agreements.coach')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -52,6 +42,7 @@ class Coach(db.Model, SerializerMixin):
     def get_id(self):
         return str(self.id)
 
+
 class Client(db.Model, SerializerMixin):
     __tablename__ = 'clients'
 
@@ -59,23 +50,31 @@ class Client(db.Model, SerializerMixin):
     name = db.Column(db.String)
     goals = db.Column(db.String)
     
-    sessions = db.relationship('Session', cascade='all,delete', backref='client')
-    coaches = association_proxy('coach_clients', 'coach')
+    sessions = db.relationship('Session', cascade='all,delete', backref='client', lazy='dynamic')
+    client_agreements = db.relationship('ClientAgreement', back_populates='client', lazy='dynamic')
+    coaches = association_proxy('client_agreements', 'coach')
 
-    serialize_rules = ('-sessions.client', '-coach_clients.client')
+    serialize_rules = ('-sessions.client', '-client_agreements.client')
 
-class CoachClient(db.Model, SerializerMixin):
-    __tablename__ = 'coach_clients'
+
+class AgreementStatus(PyEnum):
+    SIGNED = "signed"
+    SENT_BUT_NOT_SIGNED = "sent but not signed"
+    NOT_SENT = "not sent"
+
+class ClientAgreement(db.Model, SerializerMixin):
+    __tablename__ = 'client_agreements'
     
     id = db.Column(db.Integer, primary_key=True)
-    coach_id = db.Column(db.Integer, db.ForeignKey('coaches.id'), nullable=False)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), nullable=False)
-    notes = db.Column(db.String)  
-    
-    coach = db.relationship('Coach', backref='coach_clients')
-    client = db.relationship('Client', backref='coach_clients')
+    coach_id = db.Column(db.Integer, db.ForeignKey('coaches.id'), nullable=False)
+    agreement_status = db.Column(Enum(AgreementStatus), nullable=False)
 
-    serialize_rules = ('-coach.coach_clients', '-client.coach_clients')
+    client = db.relationship('Client', back_populates='client_agreements')
+    coach = db.relationship('Coach', back_populates='client_agreements')
+
+    serialize_rules = ('-client.client_agreements', '-coach.client_agreements')
+
 
 class Session(db.Model, SerializerMixin):
     __tablename__ = 'sessions'
@@ -84,7 +83,7 @@ class Session(db.Model, SerializerMixin):
     date = db.Column(db.DateTime, default=datetime.utcnow)
     notes = db.Column(db.String)
     goal_progress = db.Column(db.Integer)
-    paid_status = db.Column(db.Boolean, default=False)  # Add this line
+    paid_status = db.Column(db.Boolean, default=False)
 
     coach_id = db.Column(db.Integer, db.ForeignKey('coaches.id'), nullable=False)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), nullable=False)
@@ -97,7 +96,7 @@ class Session(db.Model, SerializerMixin):
             'date': self.date.strftime('%Y-%m-%d %H:%M:%S'),
             'notes': self.notes,
             'goal_progress': self.goal_progress,
-            'paid_status': self.paid_status,  # Add this line
+            'paid_status': self.paid_status,
             'coach_id': self.coach_id,
             'client_id': self.client_id,
         }

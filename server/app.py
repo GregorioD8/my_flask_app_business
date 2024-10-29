@@ -1,18 +1,20 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-from .models import db, Client, Coach, Session, CoachClient
+from .models import db, Client, Coach, Session, ClientAgreement  # Updated to include ClientAgreement
 from datetime import datetime
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.json.compact = False
 
 db.init_app(app)
@@ -231,28 +233,28 @@ def get_sessions_for_coach(coach_id):
     except Exception as e:
         return {'error': 'Bad request', 'message': str(e)}, 400
 
-class CoachClientResource(Resource):
+class ClientAgreementResource(Resource):
     def get(self):
         try:
-            coach_clients = CoachClient.query.all()
-            return [cc.to_dict() for cc in coach_clients], 200
+            agreements = ClientAgreement.query.all()
+            return [agreement.to_dict() for agreement in agreements], 200
         except Exception as e:
             return {'error': 'Bad request', 'message': str(e)}, 400
 
     def post(self):
         try:
-            new_coach_client = CoachClient(
-                coach_id=request.json['coach_id'],
+            new_agreement = ClientAgreement(
                 client_id=request.json['client_id'],
-                notes=request.json.get('notes', '')
+                coach_id=request.json['coach_id'],
+                agreement_signed=True  # Set to True when agreement is signed
             )
-            db.session.add(new_coach_client)
+            db.session.add(new_agreement)
             db.session.commit()
-            return new_coach_client.to_dict(), 201
+            return new_agreement.to_dict(), 201
         except Exception as e:
             return {'errors': ['validation errors', str(e)]}, 400
 
-api.add_resource(CoachClientResource, '/coach_clients')
+api.add_resource(ClientAgreementResource, '/client_agreements')
 
 @app.route('/sessions/<int:session_id>/pay', methods=['POST'])
 def pay_for_session(session_id):
@@ -290,6 +292,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    session.clear()
     return jsonify({'message': 'Logged out successfully'}), 200
 
 @app.route('/register', methods=['POST'])

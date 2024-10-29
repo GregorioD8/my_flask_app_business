@@ -8,27 +8,27 @@ const Navbar = () => {
 
   const handleLogout = () => {
     fetch(`${BACKEND_URL}/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include cookies in request
     })
-      .then((res) => {
+    .then((res) => {
         if (res.ok) {
-          //clear session and redirect if logout is successful
-          logout();
-          window.location.href = '/login';
+            logout(); // Clears localStorage and state
+            window.location.href = '/login'; // Redirects to login
         } else {
-          // Show an alert on logout failure
-          console.error("Failed to log out.");
-          alert("Failed to log out. Please try again.");
+            console.error("Failed to log out.");
+            alert("Failed to log out. Please try again.");
         }
-      })
-      .catch((error) => {
+    })
+    .catch((error) => {
         console.error("Error during logout:", error);
         alert("An error occurred while logging out. Please try again.");
-      });
-  };
+    });
+};
+
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">

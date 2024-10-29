@@ -1,8 +1,20 @@
-from .app import app
-from .models import db, Coach, Client, Session, CoachClient
+import logging
+from .config import app
+from .models import db, Coach, Client, Session, ClientAgreement
 import os
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash
+from sqlalchemy import text
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def drop_tables():
+    with app.app_context():
+        with db.engine.connect() as connection:
+            connection.execute(text("DROP TABLE IF EXISTS client_agreements;"))
+            connection.execute(text("DROP TABLE IF EXISTS sessions;"))
+            connection.execute(text("DROP TABLE IF EXISTS clients;"))
+            connection.execute(text("DROP TABLE IF EXISTS coaches;"))
 
 def create_coaches():
     coaches = [
@@ -42,49 +54,84 @@ def create_clients():
 
 def create_sessions(coaches, clients):
     base_sessions = [
-        Session(date=datetime(2024, 10, 25, 9, 0), client_id=clients[0].id, coach_id=coaches[0].id, notes="Got better at boundaries", goal_progress=8),
-        Session(date=datetime(2024, 10, 25, 10, 0), client_id=clients[1].id, coach_id=coaches[1].id, notes="Got back with abusive ex", goal_progress=6),
-        Session(date=datetime(2024, 10, 25, 1, 0), client_id=clients[2].id, coach_id=coaches[2].id, notes="Got stronger socially", goal_progress=4),
-        Session(date=datetime(2024, 10, 19, 9, 0), client_id=clients[3].id, coach_id=coaches[0].id, notes="Working on setting boundaries", goal_progress=7),
-        Session(date=datetime(2024, 10, 19, 10, 0), client_id=clients[4].id, coach_id=coaches[0].id, notes="Building confidence", goal_progress=9),
-        Session(date=datetime(2024, 10, 20, 11, 0), client_id=clients[5].id, coach_id=coaches[1].id, notes="Coping with social anxiety", goal_progress=6),
-        Session(date=datetime(2024, 10, 20, 9, 0), client_id=clients[6].id, coach_id=coaches[1].id, notes="Recovering from trauma", goal_progress=8),
-        Session(date=datetime(2024, 10, 21, 10, 0), client_id=clients[7].id, coach_id=coaches[2].id, notes="Managing chronic stress", goal_progress=7),
-        Session(date=datetime(2024, 10, 21, 11, 0), client_id=clients[8].id, coach_id=coaches[2].id, notes="Enhancing focus", goal_progress=8),
-        Session(date=datetime(2024, 10, 22, 9, 0), client_id=clients[9].id, coach_id=coaches[3].id, notes="Overcoming fear of public speaking", goal_progress=6),
-        Session(date=datetime(2024, 10, 22, 10, 0), client_id=clients[10].id, coach_id=coaches[3].id, notes="Developing mindfulness habits", goal_progress=9),
-        Session(date=datetime(2024, 10, 23, 11, 0), client_id=clients[11].id, coach_id=coaches[4].id, notes="Working through childhood trauma", goal_progress=8),
-        Session(date=datetime(2024, 10, 23, 9, 0), client_id=clients[12].id, coach_id=coaches[4].id, notes="Healing from abusive relationship", goal_progress=7),
-        Session(date=datetime(2024, 10, 24, 10, 0), client_id=clients[13].id, coach_id=coaches[5].id, notes="Managing anxiety from past experiences", goal_progress=6),
-        Session(date=datetime(2024, 10, 24, 11, 0), client_id=clients[14].id, coach_id=coaches[5].id, notes="Improving stress management", goal_progress=9),
-    ]   
-
-    # adding more sessions for each coach anf spreading thenm out
+        # Creating sessions for specific client-coach pairs for month of November
+        Session(date=datetime(2024, 10, 30, 9, 0), client_id=clients[0].id, coach_id=coaches[0].id, notes="Got better at boundaries", goal_progress=8),
+        Session(date=datetime(2024, 10, 30, 10, 0), client_id=clients[1].id, coach_id=coaches[1].id, notes="Got back with abusive ex", goal_progress=6),
+        Session(date=datetime(2024, 10, 30, 11, 0), client_id=clients[2].id, coach_id=coaches[2].id, notes="Got stronger socially", goal_progress=4),
+        Session(date=datetime(2024, 11, 1, 9, 0), client_id=clients[3].id, coach_id=coaches[0].id, notes="Discussed coping strategies", goal_progress=7),
+        Session(date=datetime(2024, 11, 1, 10, 0), client_id=clients[4].id, coach_id=coaches[1].id, notes="Improved mindfulness techniques", goal_progress=9),
+        Session(date=datetime(2024, 11, 1, 11, 0), client_id=clients[5].id, coach_id=coaches[2].id, notes="Worked on self-esteem", goal_progress=5),
+        Session(date=datetime(2024, 11, 2, 9, 0), client_id=clients[6].id, coach_id=coaches[0].id, notes="Strengthened boundaries", goal_progress=8),
+        Session(date=datetime(2024, 11, 2, 10, 0), client_id=clients[7].id, coach_id=coaches[1].id, notes="Discussed family issues", goal_progress=6),
+        Session(date=datetime(2024, 11, 2, 11, 0), client_id=clients[8].id, coach_id=coaches[2].id, notes="Explored past trauma", goal_progress=5),
+        Session(date=datetime(2024, 11, 3, 9, 0), client_id=clients[9].id, coach_id=coaches[0].id, notes="Setting new goals", goal_progress=10),
+        Session(date=datetime(2024, 11, 3, 10, 0), client_id=clients[10].id, coach_id=coaches[1].id, notes="Enhanced coping mechanisms", goal_progress=7),
+        Session(date=datetime(2024, 11, 3, 11, 0), client_id=clients[11].id, coach_id=coaches[2].id, notes="Focusing on positive outcomes", goal_progress=9),
+        Session(date=datetime(2024, 11, 4, 9, 0), client_id=clients[12].id, coach_id=coaches[0].id, notes="Discussed future plans", goal_progress=8),
+        Session(date=datetime(2024, 11, 4, 10, 0), client_id=clients[13].id, coach_id=coaches[1].id, notes="Improved stress management", goal_progress=7),
+        Session(date=datetime(2024, 11, 4, 11, 0), client_id=clients[14].id, coach_id=coaches[2].id, notes="Worked on relaxation techniques", goal_progress=6),
+        Session(date=datetime(2024, 11, 5, 9, 0), client_id=clients[15].id, coach_id=coaches[0].id, notes="Explored new strategies", goal_progress=9),
+        Session(date=datetime(2024, 11, 5, 10, 0), client_id=clients[16].id, coach_id=coaches[1].id, notes="Discussed relationship goals", goal_progress=5),
+        Session(date=datetime(2024, 11, 5, 11, 0), client_id=clients[17].id, coach_id=coaches[2].id, notes="Focused on work-life balance", goal_progress=8),
+        Session(date=datetime(2024, 11, 6, 9, 0), client_id=clients[18].id, coach_id=coaches[0].id, notes="Setting realistic expectations", goal_progress=10),
+        Session(date=datetime(2024, 11, 6, 10, 0), client_id=clients[19].id, coach_id=coaches[1].id, notes="Strengthening coping strategies", goal_progress=7),
+    ]
+    
     additional_sessions = []
+    days_to_add = 30  # Total days to add sessions
+
     for i, coach in enumerate(coaches):
-        for j in range(10):
-            # Spread out sessions in October, adjusting the dates and times
-            day_offset = j // 2 + 1  # Spreading sessions across different days
-            hour_offset = 9 + (j % 3)  # Changing the hours for variety
-            additional_sessions.append(
-                Session(
-                    date=datetime(2024, 10, day_offset + i, hour_offset, 0),  # Adjusted to October
-                    client_id=clients[(i + j) % len(clients)].id,  # Rotating through clients
-                    coach_id=coach.id,
-                    notes=f"Session with {clients[(i + j) % len(clients)].name}",
-                    goal_progress=(j % 10) + 1
+        for j in range(10):  # For each client, add 10 sessions
+            for day in range(days_to_add):
+                session_date = datetime(2024, 10, 30) + timedelta(days=day)
+
+                # Skip weekends
+                if session_date.weekday() in (5, 6):  # 5 = Saturday, 6 = Sunday
+                    continue
+
+                hour_offset = 9 + (j % 9)  # Rotate through hours from 9 AM to 5 PM
+                if hour_offset >= 17:  # Limit to 5 PM
+                    hour_offset = 9
+
+                additional_sessions.append(
+                    Session(
+                        date=datetime(session_date.year, session_date.month, session_date.day, hour_offset, 0),
+                        client_id=clients[(i + j) % len(clients)].id,
+                        coach_id=coach.id,
+                        notes=f"Session with {clients[(i + j) % len(clients)].name}",
+                        goal_progress=(j % 10) + 1
+                    )
                 )
-            )
 
     return base_sessions + additional_sessions
 
-def create_coach_clients(coaches, clients):
-    coach_clients = [
-        CoachClient(coach_id=coaches[0].id, client_id=clients[0].id, notes="Initial consultation"),
-        CoachClient(coach_id=coaches[1].id, client_id=clients[1].id, notes="Ongoing therapy"),
-        CoachClient(coach_id=coaches[2].id, client_id=clients[2].id, notes="Review session"),
+def create_client_agreements(coaches, clients):
+    # Creating client agreements for each coach-client pair
+    # Will need to programatically add these for the pairs first session
+    client_agreements = [
+        ClientAgreement(client_id=clients[0].id, coach_id=coaches[0].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[1].id, coach_id=coaches[1].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[2].id, coach_id=coaches[2].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[3].id, coach_id=coaches[0].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[4].id, coach_id=coaches[1].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[5].id, coach_id=coaches[2].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[6].id, coach_id=coaches[0].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[7].id, coach_id=coaches[1].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[8].id, coach_id=coaches[2].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[9].id, coach_id=coaches[0].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[10].id, coach_id=coaches[1].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[11].id, coach_id=coaches[2].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[12].id, coach_id=coaches[0].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[13].id, coach_id=coaches[1].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[14].id, coach_id=coaches[2].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[15].id, coach_id=coaches[0].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[16].id, coach_id=coaches[1].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[17].id, coach_id=coaches[2].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[18].id, coach_id=coaches[0].id, agreement_status="SIGNED"),
+        ClientAgreement(client_id=clients[19].id, coach_id=coaches[1].id, agreement_status="SIGNED"),
     ]
-    return coach_clients
+    
+    return client_agreements
 
 if __name__ == '__main__':
     db_path = os.path.join(os.path.dirname(__file__), 'app.db')
@@ -93,27 +140,35 @@ if __name__ == '__main__':
         os.remove(db_path)
 
     with app.app_context():
-        print('Creating a new database...')
-        db.create_all()
+        try:
+            logging.info('Dropping existing tables...')
+            drop_tables()  # This line is new
 
-        print("Seeding activities...")
-        coaches = create_coaches()
-        db.session.add_all(coaches)
-        db.session.commit()
+            logging.info('Creating a new database...')
+            db.create_all()
 
-        print("Seeding clients...")
-        clients = create_clients()
-        db.session.add_all(clients)
-        db.session.commit()
+            logging.info("Seeding activities...")
+            coaches = create_coaches()
+            db.session.add_all(coaches)
+            db.session.commit()
 
-        print("Seeding sessions...")
-        sessions = create_sessions(coaches, clients)
-        db.session.add_all(sessions)
-        db.session.commit()
+            logging.info("Seeding clients...")
+            clients = create_clients()
+            db.session.add_all(clients)
+            db.session.commit()
 
-        print("Seeding coach-client relationships...")
-        coach_clients = create_coach_clients(coaches, clients)
-        db.session.add_all(coach_clients)
-        db.session.commit()
+            logging.info("Seeding sessions...")
+            sessions = create_sessions(coaches, clients)
+            db.session.add_all(sessions)
+            db.session.commit()
 
-        print("Done seeding!")
+            logging.info("Seeding client agreements...")
+            client_agreements = create_client_agreements(coaches, clients)
+            db.session.add_all(client_agreements)
+            db.session.commit()
+
+            logging.info("Done seeding!")
+
+        except Exception as e:
+            logging.error(f"An error occurred: {e}")
+            db.session.rollback()  # Rollback the session in case of error

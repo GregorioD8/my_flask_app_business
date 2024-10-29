@@ -21,12 +21,10 @@ export const AuthProvider = ({ children }) => {
     };
     // Logout function clears details from localStorage and state
     const logout = () => {
-        // delete old stored data
         localStorage.removeItem('authToken');
         localStorage.removeItem('coachId');
         localStorage.removeItem('coachName');
-
-        // Reset state
+    
         setIsAuthenticated(false);
         setCoachId(null);
         setCoachName(null);
