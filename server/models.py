@@ -1,8 +1,7 @@
 from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import Enum
 from enum import Enum as PyEnum
-from .config import db
+from config import db
 from sqlalchemy.orm import validates
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -16,10 +15,8 @@ class Coach(db.Model, SerializerMixin):
     password_hash = db.Column(db.String, nullable=False)
     
     sessions = db.relationship('Session', cascade='all,delete', backref='coach', lazy='dynamic')
-    client_agreements = db.relationship('ClientAgreement', back_populates='coach', lazy='dynamic')
-    clients = association_proxy('client_agreements', 'client')
 
-    serialize_rules = ('-sessions.coach', '-client_agreements.coach')
+    serialize_rules = ('-sessions.coach',)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -51,30 +48,13 @@ class Client(db.Model, SerializerMixin):
     goals = db.Column(db.String)
     
     sessions = db.relationship('Session', cascade='all,delete', backref='client', lazy='dynamic')
-    client_agreements = db.relationship('ClientAgreement', back_populates='client', lazy='dynamic')
-    coaches = association_proxy('client_agreements', 'coach')
 
-    serialize_rules = ('-sessions.client', '-client_agreements.client')
-
+    serialize_rules = ('-sessions.client',)
 
 class AgreementStatus(PyEnum):
     SIGNED = "signed"
     SENT_BUT_NOT_SIGNED = "sent but not signed"
     NOT_SENT = "not sent"
-
-class ClientAgreement(db.Model, SerializerMixin):
-    __tablename__ = 'client_agreements'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), nullable=False)
-    coach_id = db.Column(db.Integer, db.ForeignKey('coaches.id'), nullable=False)
-    agreement_status = db.Column(Enum(AgreementStatus), nullable=False)
-
-    client = db.relationship('Client', back_populates='client_agreements')
-    coach = db.relationship('Coach', back_populates='client_agreements')
-
-    serialize_rules = ('-client.client_agreements', '-coach.client_agreements')
-
 
 class Session(db.Model, SerializerMixin):
     __tablename__ = 'sessions'

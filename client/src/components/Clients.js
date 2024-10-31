@@ -15,8 +15,8 @@ function Clients({ clients, onClientAdded }) {
       <ClientsForm onSubmitSuccess={handleClientAdded} />
       {selectedClient ? (
         <div>
-          <h2>{'Client: ' + selectedClient.name}</h2>
-          <p>{'Goals: ' + selectedClient.goals}</p>
+          <h2>Client: {selectedClient.name}</h2>
+          <p>Goals: {selectedClient.goals}</p>
           <button onClick={() => setSelectedClient(null)}>Back</button>
         </div>
       ) : (

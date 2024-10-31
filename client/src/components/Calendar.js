@@ -4,19 +4,13 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 
 const Calendar = ({ sessions }) => {
-  // Helpget the initials of the client
-  const getClientInitials = name => name.split(" ").map(part => part[0].toUpperCase()).join(".");
+  const getClientInitials = name => 
+    name.split(" ").map(part => part[0].toUpperCase()).join(".");
 
-  const events = sessions.map(session => {
-
-    const clientInitials = getClientInitials(session.client_name);
-    
-    
-    return {
-      title: `${clientInitials}`,
-      start: session.date,
-    };
-  });
+  const events = sessions.map(session => ({
+    title: getClientInitials(session.client_name),
+    start: session.date,
+  }));
 
   return (
     <FullCalendar

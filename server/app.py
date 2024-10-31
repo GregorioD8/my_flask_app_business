@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-from .models import db, Client, Coach, Session, ClientAgreement  # Updated to include ClientAgreement
+from models import db, Client, Coach, Session
 from datetime import datetime
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -27,7 +27,7 @@ login_manager.login_view = 'login'
 def load_user(coach_id):
     return Coach.query.get(int(coach_id))
 
-CORS(app)
+CORS(app, supports_credentials=True)
 migrate = Migrate(app, db)
 api = Api(app)
 
@@ -232,29 +232,6 @@ def get_sessions_for_coach(coach_id):
         return jsonify(session_list), 200
     except Exception as e:
         return {'error': 'Bad request', 'message': str(e)}, 400
-
-class ClientAgreementResource(Resource):
-    def get(self):
-        try:
-            agreements = ClientAgreement.query.all()
-            return [agreement.to_dict() for agreement in agreements], 200
-        except Exception as e:
-            return {'error': 'Bad request', 'message': str(e)}, 400
-
-    def post(self):
-        try:
-            new_agreement = ClientAgreement(
-                client_id=request.json['client_id'],
-                coach_id=request.json['coach_id'],
-                agreement_signed=True  # Set to True when agreement is signed
-            )
-            db.session.add(new_agreement)
-            db.session.commit()
-            return new_agreement.to_dict(), 201
-        except Exception as e:
-            return {'errors': ['validation errors', str(e)]}, 400
-
-api.add_resource(ClientAgreementResource, '/client_agreements')
 
 @app.route('/sessions/<int:session_id>/pay', methods=['POST'])
 def pay_for_session(session_id):

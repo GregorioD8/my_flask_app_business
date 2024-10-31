@@ -21,15 +21,15 @@ function Login() {
         })
         .then(response => response.json())
         .then(data => {
-            // If successful use the login func from AuthContext 
+            console.log("Login response:", data);
             if (data.message === 'Logged in successfully') {
-                // Call login with coach_id and coach_name
-                login(data.coach_id, data.coach_name);  
-                history.push('/coach-dashboard'); // go to dashboard after login
+                login(data.coach_id, data.coach_name);
+                history.push('/coach-dashboard');
             } else {
                 alert('Invalid credentials');
             }
-        });
+        })
+        .catch(error => console.error("Login error:", error));
     };
 
     return (

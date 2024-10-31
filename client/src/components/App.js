@@ -10,7 +10,6 @@ import Navbar from "./Navbar";
 import PrivateRoute from "./PrivateRoute";
 
 function App() {
-
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
   const [clients, setClients] = useState([]);
@@ -57,7 +56,7 @@ function App() {
           path="/coach-dashboard"
           component={() => (
             <CoachDashboard
-              clients={clients} 
+              clients={clients}
               sessions={sessions}
               coaches={coaches}
             />
