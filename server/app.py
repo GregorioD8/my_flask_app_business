@@ -272,6 +272,10 @@ def logout():
     session.clear()
     return jsonify({'message': 'Logged out successfully'}), 200
 
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return jsonify({'error': 'Unauthorized'}), 401
+
 @app.route('/register', methods=['POST'])
 def register():
     data = request.json
