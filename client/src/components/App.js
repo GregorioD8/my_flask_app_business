@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { AuthContext } from "./AuthContext"; // Import AuthContext
 import Clients from "./Clients";
 import Coaches from "./Coaches";
 import Sessions from "./Sessions";
@@ -15,23 +16,31 @@ function App() {
   const [clients, setClients] = useState([]);
   const [coaches, setCoaches] = useState([]);
   const [sessions, setSessions] = useState([]);
+  const { isAuthenticated } = useContext(AuthContext); // Access isAuthenticated
 
   useEffect(() => {
-    fetch(`${BACKEND_URL}/clients`)
-      .then(response => response.json())
-      .then(data => setClients(data))
-      .catch(error => console.error("Error fetching clients:", error));
+    if (isAuthenticated) { // Fetch data only if authenticated
+      fetch(`${BACKEND_URL}/clients`)
+        .then(response => response.json())
+        .then(data => setClients(data))
+        .catch(error => console.error("Error fetching clients:", error));
 
-    fetch(`${BACKEND_URL}/coaches`)
-      .then(response => response.json())
-      .then(data => setCoaches(data))
-      .catch(error => console.error("Error fetching coaches:", error));
+      fetch(`${BACKEND_URL}/coaches`)
+        .then(response => response.json())
+        .then(data => setCoaches(data))
+        .catch(error => console.error("Error fetching coaches:", error));
 
-    fetch(`${BACKEND_URL}/sessions`)
-      .then(response => response.json())
-      .then(data => setSessions(data))
-      .catch(error => console.error("Error fetching sessions:", error));
-  }, []);
+      fetch(`${BACKEND_URL}/sessions`)
+        .then(response => response.json())
+        .then(data => setSessions(data))
+        .catch(error => console.error("Error fetching sessions:", error));
+    } else {
+      // Clear the data when logged out to avoid data leakage
+      setClients([]);
+      setCoaches([]);
+      setSessions([]);
+    }
+  }, [isAuthenticated, BACKEND_URL]); // Dependency array includes isAuthenticated
 
   return (
     <Router>

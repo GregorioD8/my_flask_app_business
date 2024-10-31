@@ -6,13 +6,13 @@ function Sessions() {
 
   useEffect(() => {
     fetch(`${BACKEND_URL}/sessions`)
-    .then(response => response.json())
-    .then(data => setSessions(Array.isArray(data) ? data : []))
-    .catch(error => {
-      console.error("Error fetching sessions:", error);
-      setSessions([]);
-    });
-  }, []);
+      .then(response => response.json())
+      .then(data => setSessions(Array.isArray(data) ? data : []))
+      .catch(error => {
+        console.error("Error fetching sessions:", error);
+        setSessions([]);
+      });
+  }, [BACKEND_URL]);
 
   return (
     <div>

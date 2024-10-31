@@ -7,15 +7,13 @@ function Home() {
 
   const FRONTEND_URL = process.env.REACT_APP_FRONTEND_URL;
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-
-
   useEffect(() => {
-    // Fetch the coaches from your backend API
     fetch(`${BACKEND_URL}/coaches`)
       .then(response => response.json())
       .then(data => setCoaches(data))
       .catch(error => console.error('Error fetching coaches:', error));
-  }, []);
+  }, [BACKEND_URL]);
+  
 
   const toggleCoachesList = () => {
     setShowCoaches(!showCoaches);

@@ -1,3 +1,4 @@
+// Login.js
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
@@ -11,18 +12,16 @@ function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Send login data to the backend
         fetch(`${BACKEND_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ username, password }),
-            credentials: 'include', // Add this line
+            credentials: 'include',
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Login response:", data);
             if (data.message === 'Logged in successfully') {
                 login(data.coach_id, data.coach_name);
                 history.push('/coach-dashboard');

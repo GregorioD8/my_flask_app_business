@@ -16,23 +16,21 @@ const CoachDashboard = () => {
   // Fetch clients and sessions based on the logged-in coach
   useEffect(() => {
     if (coachId) {
-      // Fetch clients who have scheduled sessions with the logged-in coach
       fetch(`${BACKEND_URL}/coaches/${coachId}/clients_with_sessions`)
         .then((res) => res.json())
         .then((data) => setClients(data))
         .catch((error) => console.error("Error fetching clients:", error));
-
-      // Fetch sessions for the logged-in coach (with or without selected client)
+  
       const url = selectedClient
         ? `${BACKEND_URL}/coaches/${coachId}/sessions?client_id=${selectedClient}`
         : `${BACKEND_URL}/coaches/${coachId}/sessions`;
-
+  
       fetch(url)
         .then((res) => res.json())
         .then((data) => setSessions(data))
         .catch((error) => console.error("Error fetching sessions:", error));
     }
-  }, [coachId, selectedClient, refreshPage]);
+  }, [coachId, selectedClient, refreshPage, BACKEND_URL]);
 
   const handleClientChange = (e) => {
     setSelectedClient(e.target.value);
