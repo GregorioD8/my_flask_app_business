@@ -1,7 +1,7 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import Enum
 from enum import Enum as PyEnum
-from config import db
+from .config import db
 from sqlalchemy.orm import validates
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
