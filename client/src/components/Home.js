@@ -1,3 +1,4 @@
+// Home.js 
 import React, { useState, useEffect } from 'react';
 import '../index.css'; // Ensure this file is imported for the custom styles
 

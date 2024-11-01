@@ -9,17 +9,23 @@ export const AuthProvider = ({ children }) => {
     const [coachName, setCoachName] = useState('');
 
     useEffect(() => {
-        // Initialize state from localStorage if available
+        // Load initial state from localStorage if available
         const token = localStorage.getItem('authToken');
         const storedCoachId = localStorage.getItem('coachId');
         const storedCoachName = localStorage.getItem('coachName');
 
+        // Check if the token exists to set authenticated state
         if (token) {
             setIsAuthenticated(true);
             setCoachId(storedCoachId);
             setCoachName(storedCoachName);
+        } else {
+            // Ensures state resets if no token is found
+            setIsAuthenticated(false);
+            setCoachId(null);
+            setCoachName('');
         }
-    }, []); 
+    }, []); // Only run once on mount
 
     const login = (id, name) => {
         localStorage.setItem('authToken', 'true');

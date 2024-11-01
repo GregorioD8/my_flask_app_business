@@ -1,3 +1,4 @@
+# app.py
 from flask import Flask, request, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -266,11 +267,15 @@ def login():
     return jsonify({'message': 'Invalid credentials'}), 401
 
 @app.route('/logout', methods=['POST'])
-@login_required
 def logout():
-    logout_user()
-    session.clear()
-    return jsonify({'message': 'Logged out successfully'}), 200
+    if current_user.is_authenticated:
+        logout_user()
+        session.clear()
+        return jsonify({'message': 'Logged out successfully'}), 200
+    else:
+        # Even if the user is not authenticated, return a success message
+        # to handle any mismatched client-server session state gracefully
+        return jsonify({'message': 'Already logged out'}), 200
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():

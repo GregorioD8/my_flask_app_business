@@ -8,26 +8,36 @@ const Navbar = () => {
     const { isAuthenticated, coachName, logout } = useContext(AuthContext);
 
     const handleLogout = () => {
-        fetch(`${BACKEND_URL}/logout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-        })
-        .then((res) => {
-            if (res.ok) {
-                logout();
-                window.location.href = '/login';
-            } else {
-                alert("Failed to log out. Please try again.");
-            }
-        })
-        .catch((error) => {
-            console.error("Error during logout:", error);
-            alert("An error occurred while logging out. Please try again.");
-        });
-    };
+      // Temporarily bypass server call for testing
+      logout();
+      window.location.href = '/login';
+  };
+    // const handleLogout = () => {
+    //     fetch(`${BACKEND_URL}/logout`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         credentials: 'include',
+    //     })
+    //     .then((res) => {
+    //         if (res.ok) {
+    //             logout();
+    //             window.location.href = '/login';
+    //         } else {
+    //             // Attempt local logout even if backend fails
+    //             alert("Failed to log out from server. Logging out locally.");
+    //             logout();
+    //             window.location.href = '/login';
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         console.error("Error during logout:", error);
+    //         alert("An error occurred while logging out. Logging out locally.");
+    //         logout(); // Ensures local state update on error
+    //         window.location.href = '/login';
+    //     });
+    // };
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">

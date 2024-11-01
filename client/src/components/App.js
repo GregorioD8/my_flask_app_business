@@ -1,3 +1,4 @@
+// App.js
 import React, { useEffect, useState, useContext } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthContext } from "./AuthContext"; // Import AuthContext

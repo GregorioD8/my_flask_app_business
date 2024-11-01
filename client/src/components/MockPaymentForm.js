@@ -1,3 +1,4 @@
+// MockPaymentForm.js
 import React, { useState } from "react";
 
 const MockPaymentForm = ({ session, onPaymentSubmit, onCancel }) => {

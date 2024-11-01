@@ -1,3 +1,4 @@
+# models.py
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import Enum
 from enum import Enum as PyEnum

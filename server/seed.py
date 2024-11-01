@@ -1,3 +1,4 @@
+# seed.py
 import logging
 from .config import app
 from .models import db, Coach, Client, Session
