@@ -1,7 +1,7 @@
 # seed.py
 import logging
-from config import app
-from models import db, Coach, Client, Session
+from .config import app
+from .models import db, Coach, Client, Session
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash
 from sqlalchemy import text
