@@ -1,7 +1,7 @@
 # seed.py
 import logging
-from .config import app
-from .models import db, Coach, Client, Session
+from config import app
+from models import db, Coach, Client, Session
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash
 from sqlalchemy import text
@@ -91,12 +91,32 @@ def create_clients():
 
 import random  # Ensure you have imported the random module
 
+def distribute_clients_among_coaches(coaches, clients):
+    """Distribute clients as evenly as possible among coaches."""
+    clients_per_coach = len(clients) // len(coaches)
+    extra_clients = len(clients) % len(coaches)  # Remaining clients after even distribution
+    
+    coach_client_map = {}
+    client_index = 0
+    
+    for i, coach in enumerate(coaches):
+        # Assign clients_per_coach + 1 clients to some coaches to handle any extras
+        num_clients = clients_per_coach + (1 if i < extra_clients else 0)
+        assigned_clients = clients[client_index:client_index + num_clients]
+        coach_client_map[coach.id] = assigned_clients
+        client_index += num_clients
+
+    return coach_client_map
+
 def create_sessions(coaches, clients):
     """Create a list of sessions to be added to the database."""
     sessions = []
     days_to_add = 30  # Total days to add sessions
     time_slots = [f"{hour}:00" for hour in range(9, 17)]  # Time slots from 9 AM to 4 PM
-
+    
+    # Distribute clients among coaches
+    coach_client_map = distribute_clients_among_coaches(coaches, clients)
+    
     for day in range(days_to_add):
         session_date = datetime(2024, 11, 1) + timedelta(days=day)  # Start date
 
@@ -105,16 +125,22 @@ def create_sessions(coaches, clients):
             continue
 
         for coach in coaches:
+            # Get the clients assigned to this coach
+            assigned_clients = coach_client_map.get(coach.id, [])
+            
+            if not assigned_clients:
+                continue  # Skip if no clients are assigned to this coach
+
             # Randomly select between 3 to 5 unique time slots for this coach
             num_sessions = random.randint(3, 5)
             selected_slots = random.sample(time_slots, num_sessions)
 
-            # For each selected slot, assign a unique client
+            # For each selected slot, assign a unique client from the assigned list
             for slot in selected_slots:
                 hour = int(slot.split(':')[0])  # Get hour from the time slot
                 
-                # Find a client that is not already booked for this day
-                available_clients = [client for client in clients if not any(
+                # Find a client from the assigned list who is not already booked for this day
+                available_clients = [client for client in assigned_clients if not any(
                     session.client_id == client.id and session.date.date() == session_date.date()
                     for session in sessions
                 )]
@@ -122,7 +148,7 @@ def create_sessions(coaches, clients):
                 if not available_clients:
                     continue  # Skip if no available clients
 
-                client = random.choice(available_clients)  # Select a random client
+                client = random.choice(available_clients)  # Select a random available client
 
                 session = Session(
                     date=datetime(session_date.year, session_date.month, session_date.day, hour, 0),
