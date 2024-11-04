@@ -9,8 +9,8 @@ const Calendar = ({ sessions }) => {
     name.split(" ").map(part => part[0].toUpperCase()).join(".");
 
   const events = sessions.map(session => ({
-    title: getClientInitials(session.client_name),
-    start: session.date,
+    title: getClientInitials(session.client_name), // Set event title as client initials
+    start: session.date, // Set event start date and time
   }));
 
   return (

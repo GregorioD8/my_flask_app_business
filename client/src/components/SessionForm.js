@@ -1,8 +1,9 @@
-// SessionForm.js
 import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const SessionForm = ({ onSubmitSuccess, selectedCoach, clients }) => {
   const formSchema = yup.object().shape({
     client_id: yup.string().required("Must select a client"),
@@ -22,39 +23,36 @@ const SessionForm = ({ onSubmitSuccess, selectedCoach, clients }) => {
       client_id: "",
       date: "",
       hour: "",
-      period: "AM", //make it default to am
+      period: "AM", // default to AM
       notes: "",
       goal_progress: "",
     },
     validationSchema: formSchema,
     onSubmit: (values) => {
-      // Convert time
       let hour = parseInt(values.hour);
       if (values.period === "PM" && hour !== 12) {
         hour += 12;
       } else if (values.period === "AM" && hour === 12) {
         hour = 0;
       }
-      const time = `${hour.toString().padStart(2, "0")}:00:00`;
-      const dateTime = `${values.date} ${time}`;
+      const time = `${hour.toString().padStart(2, "0")}:00:00`; // Format hour to 'HH:00:00'
+      const dateTime = `${values.date} ${time}`;  // Combine date and time into single timestamp
 
       fetch(`${BACKEND_URL}/sessions`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          date: dateTime,
-          client_id: values.client_id,
-          coach_id: selectedCoach,
+          date: dateTime, // Send session datetime to backend
+          client_id: values.client_id, // Associate session with selected client
+          coach_id: selectedCoach, // Associate session with logged-in coach
           notes: values.notes,
           goal_progress: values.goal_progress,
         }),
       })
         .then((res) => {
-          if (res.status === 201) {
-            formik.resetForm();
-            onSubmitSuccess && onSubmitSuccess();
+          if (res.status === 201) {  // Check for successful response
+            formik.resetForm(); // Clear form on success
+            onSubmitSuccess && onSubmitSuccess(); // Notify parent of successful submission
           }
         })
         .catch((error) => console.error("Error adding session:", error));
@@ -70,51 +68,51 @@ const SessionForm = ({ onSubmitSuccess, selectedCoach, clients }) => {
   };
 
   return (
-    <div className="custom-shadow" style={smallerFormContainerStyle}> 
-      <form onSubmit={formik.handleSubmit} style={formStyle}>
-        <div style={formGroupStyle}>
-          <label htmlFor="client_id" style={labelStyle}>Client</label>
+    <div className="custom-shadow form-container">
+      <form onSubmit={formik.handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="client_id">Client</label>
           <select
             id="client_id"
             name="client_id"
             onChange={formik.handleChange}
             value={formik.values.client_id}
-            style={inputStyle}
+            className="form-control"
           >
             <option value="" label="Select client" />
-            {clients.map(client => (
+            {clients.map((client) => (
               <option key={client.id} value={client.id}>
                 {client.name}
               </option>
             ))}
           </select>
-          {formik.errors.client_id && <p style={errorStyle}>{formik.errors.client_id}</p>}
+          {formik.errors.client_id && <p className="text-danger">{formik.errors.client_id}</p>}
         </div>
 
-        <div style={formGroupStyle}>
-          <label htmlFor="date" style={labelStyle}>Date</label>
+        <div className="form-group">
+          <label htmlFor="date">Date</label>
           <input
             id="date"
             name="date"
             type="date"
             onChange={formik.handleChange}
             value={formik.values.date}
-            style={inputStyle}
+            className="form-control"
           />
-          {formik.errors.date && <p style={errorStyle}>{formik.errors.date}</p>}
+          {formik.errors.date && <p className="text-danger">{formik.errors.date}</p>}
         </div>
 
-        <div style={formGroupStyle}>
-          <label htmlFor="hour" style={labelStyle}>Time</label>
+        <div className="form-group">
+          <label htmlFor="hour">Time</label>
           <select
             id="hour"
             name="hour"
             onChange={formik.handleChange}
             value={formik.values.hour}
-            style={{ ...inputStyle, marginRight: "10px" }}
+            className="form-control-inline"
           >
             <option value="" label="Select hour" />
-            {generateHours().map(hour => (
+            {generateHours().map((hour) => (
               <option key={hour} value={hour}>
                 {hour}
               </option>
@@ -125,95 +123,44 @@ const SessionForm = ({ onSubmitSuccess, selectedCoach, clients }) => {
             name="period"
             onChange={formik.handleChange}
             value={formik.values.period}
-            style={inputStyle}
+            className="form-control-inline"
           >
             <option value="AM">AM</option>
             <option value="PM">PM</option>
           </select>
-          {formik.errors.hour && <p style={errorStyle}>{formik.errors.hour}</p>}
-          {formik.errors.period && <p style={errorStyle}>{formik.errors.period}</p>}
+          {formik.errors.hour && <p className="text-danger">{formik.errors.hour}</p>}
+          {formik.errors.period && <p className="text-danger">{formik.errors.period}</p>}
         </div>
 
-        <div style={formGroupStyle}>
-          <label htmlFor="notes" style={labelStyle}>Notes</label>
+        <div className="form-group">
+          <label htmlFor="notes">Notes</label>
           <textarea
             id="notes"
             name="notes"
             onChange={formik.handleChange}
             value={formik.values.notes}
-            style={textareaStyle}
+            className="form-control"
           />
-          {formik.errors.notes && <p style={errorStyle}>{formik.errors.notes}</p>}
+          {formik.errors.notes && <p className="text-danger">{formik.errors.notes}</p>}
         </div>
 
-        <div style={formGroupStyle}>
-          <label htmlFor="goal_progress" style={labelStyle}>Goal Progress (1-10)</label>
+        <div className="form-group">
+          <label htmlFor="goal_progress">Goal Progress (1-10)</label>
           <input
             id="goal_progress"
             name="goal_progress"
             type="number"
             onChange={formik.handleChange}
             value={formik.values.goal_progress}
-            style={inputStyle}
+            className="form-control"
           />
-          {formik.errors.goal_progress && <p style={errorStyle}>{formik.errors.goal_progress}</p>}
+          {formik.errors.goal_progress && <p className="text-danger">{formik.errors.goal_progress}</p>}
         </div>
 
-        <button type="submit" style={submitButtonStyle}>Submit</button>
+        <button type="submit" className="btn-session">Submit</button>
       </form>
     </div>
   );
 };
-
-// form styling
-const smallerFormContainerStyle = {
-  padding: "20px",
-  marginBottom: "30px",
-  backgroundColor: "#f9f9f9",
-  width: "90%",
-  maxWidth: "500px",
-  margin: "0", // Align to the left
-};
-
-const formStyle = {
-  display: "flex",
-  flexDirection: "column",
-};
-
-const formGroupStyle = {
-  marginBottom: "15px",
-};
-
-const labelStyle = {
-  marginBottom: "5px",
-  fontWeight: "bold",
-};
-
-const inputStyle = {
-  width: "100%",
-  padding: "8px",
-  border: "1px solid #ccc",
-  borderRadius: "5px",
-};
-
-const textareaStyle = {
-  ...inputStyle,
-  minHeight: "100px",
-};
-
-const submitButtonStyle = {
-  padding: "10px 15px",
-  backgroundColor: "#468B90",
-  color: "white",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer",
-  fontSize: "16px",
-};
-
-const errorStyle = {
-  color: "red",
-};
-
 
 export default SessionForm;

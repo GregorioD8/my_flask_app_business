@@ -1,5 +1,5 @@
 // AuthContext.js
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 
 export const AuthContext = createContext();
 
@@ -9,42 +9,37 @@ export const AuthProvider = ({ children }) => {
     const [coachName, setCoachName] = useState('');
 
     useEffect(() => {
-        // Load initial state from localStorage if available
+        // Check if there's an existing token and set auth state
         const token = localStorage.getItem('authToken');
         const storedCoachId = localStorage.getItem('coachId');
         const storedCoachName = localStorage.getItem('coachName');
 
-        // Check if the token exists to set authenticated state
         if (token) {
             setIsAuthenticated(true);
             setCoachId(storedCoachId);
             setCoachName(storedCoachName);
-        } else {
-            // Ensures state resets if no token is found
-            setIsAuthenticated(false);
-            setCoachId(null);
-            setCoachName('');
         }
-    }, []); // Only run once on mount
+    }, []); // Run once on mount to initialize auth state
 
-    const login = (id, name) => {
+    const login = useCallback((id, name) => {
         localStorage.setItem('authToken', 'true');
         localStorage.setItem('coachId', id);
         localStorage.setItem('coachName', name);
         setIsAuthenticated(true);
         setCoachId(id);
         setCoachName(name);
-    };
+    }, []);
 
-    const logout = () => {
+    const logout = useCallback(() => {
         localStorage.removeItem('authToken');
         localStorage.removeItem('coachId');
         localStorage.removeItem('coachName');
         setIsAuthenticated(false);
         setCoachId(null);
         setCoachName('');
-    };
-
+    }, []);
+    
+    // Define context values with login and logout functions
     return (
         <AuthContext.Provider value={{ isAuthenticated, coachId, coachName, login, logout }}>
             {children}

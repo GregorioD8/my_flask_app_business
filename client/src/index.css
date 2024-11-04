@@ -1,210 +1,432 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-/* Calendar day grid borders */
-.fc-daygrid-day {
-  border: 1px solid #3c4043 !important;
-}
 
-.fc-col-header-cell {
-  border: 1px solid #3c4043 !important;
-}
-
-/* Weekend and current day highlights */
-.fc-day-sat, .fc-day-sun {
-  background-color: #EFEFEF !important;
-}
-
-.fc-day-today {
-  background-color: #fee8b4 !important;
-  border: 1px solid #E0A839 !important;
-}
-
-/* Event styles */
-.fc-event {
-  background-color: #EAF4F4 !important;
-  color: #333333 !important;
-  border: 1px solid #5DA3A6 !important;
-  padding: 2px 5px;
-  border-radius: 5px;
-}
-
-.fc .fc-daygrid-event-dot {
-  background-color: #5DA3A6 !important;
-}
-
-/* Calendar container */
-.fc {
-  background-color: #F4F4F9 !important;
-  border-radius: 10px;
-  border: 1px solid #3c4043 !important;
-  overflow: hidden;
-  max-width: 1200px; 
-  margin-left: auto;  
-  margin-right: auto; 
-  padding-left: 0px; 
-  padding-right: 0px; 
-}
-
-/* Calendar toolbar */
-.fc-toolbar {
-  background-color: #cfcfcf !important;
-  border-radius: 10px 10px 0 0 !important;
-  padding: 10px 20px !important;
-}
-
-.fc-toolbar .fc-button {
-  margin-bottom: 10px; 
-}
-.fc-header-toolbar {
-  margin-bottom: 0 !important; 
-  padding-bottom: 0 !important; 
-}
-
-.fc .fc-daygrid-header {
-  margin-top: 0 !important; 
-  padding-top: 0 !important;
-}
-/* Calendar navigation buttons */
-.fc .fc-button {
-  background-color: #468B90 !important;
-  color: white !important;
-  border-radius: 5px !important;
-  padding: 5px 10px !important;
-  border: none !important;
-}
-
-.fc .fc-button:hover {
-  background-color: #1d6d6d !important;
-}
-
-/* Sessions table styling */
-.table-responsive {
-  background-color: transparent !important;
-  border-radius: 10px;
-  padding: 0 !important;
-  box-shadow: none !important;
-  max-height: 300px;
-  overflow-y: scroll;
-}
-
-.table th, .table td {
-  padding: 15px !important;
-}
-
-/* Remove shadow and background */
-.custom-shadow, .scheduled-sessions {
-  border-radius: 10px;
-  padding: 0;
-  background-color: transparent !important;
-  box-shadow: none !important;
-}
-
-/* Form buttons */
-button[type="submit"], .get-started-btn {
-  background-color: #5DA3A6 !important; 
-  color: white !important;
-  padding: 10px 15px !important;
-  font-size: 16px;
-  border-radius: 8px; 
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-button[type="submit"]:hover, .get-started-btn:hover {
-  background-color: #1d6d6d !important;
-}
-.get-started-btn {
-  background-color: #5DA3A6 !important; 
-  color: white !important;
-  border: none !important; 
-  padding: 10px 15px !important;
-  font-size: 16px;
-  border-radius: 8px; 
-  cursor: pointer;
-  box-shadow: none !important; 
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.get-started-btn:hover {
-  background-color: #1d6d6d !important;
-}
-/* Form alignment */
-form label, form input, form select, form textarea, form button {
-  display: block;
-  width: 100%;
-  text-align: left;
-}
-
-/* Ensure the form container is flush left */
-.custom-shadow {
-  text-align: left;
-  margin-left: 0 !important; 
-  padding-left: 0 !important;
-  width: 100%; 
-}
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@600&display=swap');
 
 body {
-  background-color: #EAE4DD !important;
-}
-
-.container, .main-content {
-  background-color: #EAE4DD !important;
-  color: #21202c;
-}
-
-/* Main footer */
-.main-footer {
-  padding: 30px;
-  text-align: center;
-  background-color: #556B8D; 
-  color: #FFFFFF;
-  font-size: 14px;
-  margin-top: 40px;
-}
-
-/* Dashboard footer */
-.dashboard-footer {
-  padding: 30px;
-  text-align: center;
-  background-color: #EAE4DD;
-  color: #1f1f1f;
-  font-size: 14px;
-  margin-top: 40px;
-}
-
-/* Sticky table headers */
-.table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-}
-
-/* Header elements */
-h1, h2, h3, h4, h5, h6, th {
+  padding-top: 0px;
+  background-color: #f8f4f0 !important;
   font-family: 'Roboto', sans-serif;
-  font-weight: 700; 
-  color: #333333;
+}
+/*******************************
+
+/* Coaches Section */
+.coaches-section {
+  padding: 60px 20px;
+  text-align: center;
 }
 
-/* Buttons */
-.btn-primary {
-  background-color: #468B90 !important;
+/* Floating Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
-.btn-primary:hover {
-  background-color: #1d6d6d !important; 
+/*********************************
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.btn-danger {
-  background-color: #c67432 !important;
+.loading-spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #468B90;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 1.5s linear infinite;
+  margin-bottom: 20px;
 }
 
-.btn-danger:hover {
-  background-color: #a0541e !important;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-.nav-link {
-  font-size: 16px; /* or whatever size you want */
+.loading-overlay h2 {
+  font-family: 'Roboto', sans-serif;
+  color: #468B90;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.hero-section .scroll-button-container {
+  margin-top: 300px; /* Adjust this to control how far down the button sits */
+}
+
+.hero-section .scroll-button {
+  background-color: #468B90;
+  color: white;
+  font-size: 1.1rem;
+  padding: 10px 30px;
+  border-radius: 30px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.hero-section .scroll-button:hover {
+  background-color: #336b6f;
+  transform: scale(1.05);
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 20px; /* Adjust this to control spacing from the bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100vh;
+  padding-bottom: 40px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #3d3d3d; /* Adjust color to match subtitle */
+  text-align: center;
+}
+
+.hero-title, .hero-subtitle {
+  color: #3d3d3d; /* Consistent color for both title and subtitle */
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+/* Coach Dashboard Section */
+.container {
+  padding: 20px;
+}
+
+.coaches-section h2, .coach-dashboard h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.form-container {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-control, .form-control-inline {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.sessions-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+.sessions-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.sessions-scroll::-webkit-scrollbar-thumb {
+  background-color: #468B90;
+  border-radius: 4px;
+}
+.sessions-scroll::-webkit-scrollbar-track {
+  background-color: #f4ece6;
+}
+
+/* Button Styling to Match "Hide Coaches" */
+.btn {
+  font-size: 1rem;
+  padding: 10px 25px;
+  border-radius: 30px;
+
+  color: white;
+  border: 2px solid transparent;
+  outline: 2px solid transparent;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease, outline-color 0.3s ease;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+/* Card Styling */
+/* Coach Card Styling */
+.card {
+  background: linear-gradient(135deg, #ffffff, #f9f9f9); /* Subtle gradient to match ServicesSection */
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover transition */
+  overflow: hidden; /* Ensures content stays within rounded corners */
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02); /* Lift on hover */
+  box-shadow: 0px 12px 36px rgba(0, 0, 0, 0.15); /* Darker shadow on hover */
+}
+
+/* Coach Image Styling */
+.card-img-top {
+  border-top-left-radius: 15px; /* Matches card corner radius */
+  border-top-right-radius: 15px; /* Matches card corner radius */
+  object-fit: cover; /* Ensures image fits without stretching */
+  height: 200px; /* Set a consistent height */
+}
+
+/* Coach Card Text Styling */
+.card-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.card-background {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.card-text {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.card-text strong {
+  color: #333; /* Optional: Darker color for "Background:" label */
+  font-weight: 600;
+}
+/* Card Styling */
+
+
+/* Image Styling within Card */
+.card-img-top,
+.card img {
+  background-color: transparent; /* Ensure no background color on the image */
+  border-radius: inherit; /* Match the .card's border-radius */
+  display: block;
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+/* Calendar Styling */
+.fc {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+}
+
+.fc-toolbar-title {
+  font-family: 'Poppins', sans-serif;
+  color: #21202c;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.fc-daygrid-event {
+  background-color: #5DA3A6 !important;
+  color: white !important;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85em;
+  padding: 2px 5px;
+}
+
+/* Footer */
+footer {
+  padding: 20px;
+  text-align: center;
+  background-color: #f4ece6;
+  color: #468B90;
+}
+
+/* Styling for Update, Delete, and Pay Buttons with a Light Gradient and Dark Text */
+.btn-update, .btn-delete, .btn-pay, .btn-session {
+  background: linear-gradient(135deg, #ffffff, #f1f1f1); /* White/light gradient */
+  color: #333333; /* Dark gray text */
+  border: 2px solid transparent;
+  border-radius: 30px; /* Match shape of other buttons */
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect for the gradient buttons */
+.btn-update:hover, .btn-delete:hover, .btn-pay:hover, .btn-session:hover, .btn-login:hover {
+  background: linear-gradient(135deg, #e0e0e0, #ffffff); /* Slightly darker gradient on hover */
+  transform: scale(1.2);
+}
+
+/* Individual border and outline colors for distinction */
+.btn-update {
+  outline: 2px solid #e0e0e0; 
+  margin-right: 8px;
+}
+
+.btn-delete {
+  outline: 2px solid #e0e0e0;
+  margin-right: 8px;
+}
+
+.btn-pay {
+  outline: 2px solid #e0e0e0; 
+}
+
+
+.btn-session, .btn-login {
+  background: linear-gradient(135deg, #ffffff, #f1f1f1); /* White/light gradient */
+  color: #333333; /* Dark gray text */
+  border: 2px solid transparent;
+  border-radius: 30px; /* Match shape of other buttons */
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  outline: 2px solid #e0e0e0;
+  margin-right: 8px; /* Ensure consistent spacing */
+}
+
+.fc-button-primary {
+  background: linear-gradient(135deg, #ffffff, #f1f1f1); /* White/light gradient */
+  color: #333333 !important; /* Dark gray text */
+  border: 2px solid transparent;
+  border-radius: 30px; /* Match shape of other buttons */
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  outline: 2px solid #e0e0e0; /* Light outline for subtle effect */
+  margin-right: 8px; /* Consistent spacing */
+}
+
+.fc-button-primary:hover {
+  background: linear-gradient(135deg, #e0e0e0, #ffffff); /* Slightly darker gradient on hover */
+  transform: scale(1.2);
+}
+
+.logo-container {
+  background-color: #ebe4de; /* Background color matching the logo */
+  text-align: center;
+  padding: 20px;
+}
+
+.logo-image {
+  width: 150px !important; /* Adjust to desired size */
+  max-width: 100%;
+}
+
+.fc-event-dot {
+  background-color: #ffffff !important; /* Set color to white */
+}
+.services-section {
+  padding: 80px 20px;
+  background-color: #f4ece6; /* Matches the "Meet Our Coaches" background */
+  text-align: center;
+  color: #333;
+}
+
+.services-title {
+  font-size: 2.5rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 40px;
+}
+
+.services-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .services-list {
+    grid-template-columns: repeat(2, 1fr); /* Two-column layout for medium and larger screens */
+  }
+}
+
+.service-item {
+  padding: 20px;
+  background: linear-gradient(135deg, #ffffff, #f9f9f9); /* Light gradient background matching button style */
+  border-radius: 15px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.service-item:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0px 12px 36px rgba(0, 0, 0, 0.15);
+}
+
+.service-title {
+  font-size: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.service-description {
+  font-size: 1rem;
+  font-family: 'Roboto', sans-serif;
+  color: #555;
+  line-height: 1.6;
+  max-width: 90%;
 }

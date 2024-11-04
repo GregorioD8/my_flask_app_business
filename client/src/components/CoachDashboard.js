@@ -13,23 +13,33 @@ const CoachDashboard = () => {
   const [selectedClient, setSelectedClient] = useState("");
   const [refreshPage, setRefreshPage] = useState(false);
   const [paymentSession, setPaymentSession] = useState(null);
+  const [loading, setLoading] = useState(true); // New loading state
 
   // Fetch clients and sessions based on the logged-in coach
   useEffect(() => {
     if (coachId) {
-      fetch(`${BACKEND_URL}/coaches/${coachId}/clients_with_sessions`)
-        .then((res) => res.json())
-        .then((data) => setClients(data))
-        .catch((error) => console.error("Error fetching clients:", error));
-  
-      const url = selectedClient
-        ? `${BACKEND_URL}/coaches/${coachId}/sessions?client_id=${selectedClient}`
-        : `${BACKEND_URL}/coaches/${coachId}/sessions`;
-  
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => setSessions(data))
-        .catch((error) => console.error("Error fetching sessions:", error));
+      setLoading(true); // Start loading
+      const fetchClientsAndSessions = async () => {
+        try {
+          const clientsResponse = await fetch(`${BACKEND_URL}/coaches/${coachId}/clients_with_sessions`);
+          const clientsData = await clientsResponse.json();
+          setClients(clientsData);
+
+          const url = selectedClient
+            ? `${BACKEND_URL}/coaches/${coachId}/sessions?client_id=${selectedClient}`
+            : `${BACKEND_URL}/coaches/${coachId}/sessions`;
+
+          const sessionsResponse = await fetch(url);
+          const sessionsData = await sessionsResponse.json();
+          setSessions(sessionsData);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setLoading(false); // Stop loading when data is fetched
+        }
+      };
+
+      fetchClientsAndSessions();
     }
   }, [coachId, selectedClient, refreshPage, BACKEND_URL]);
 
@@ -103,6 +113,15 @@ const CoachDashboard = () => {
     fontSize: "16px",
   };
 
+  if (loading) {
+    return (
+      <div className="loading-overlay">
+        <div className="loading-spinner"></div>
+        <h2>Loading Dashboard...</h2>
+      </div>
+    );
+  }
+
   return (
     <div className="container mt-4">
       <h1 className="text-center mb-4">Coach Dashboard</h1>
@@ -129,7 +148,7 @@ const CoachDashboard = () => {
 
       {/* Form and Calendar Layout */}
       <div className="row">
-        <div className="col-md-3">
+      <div id="add-session-card" className="col-md-3">
           <h2>Add Session</h2>
           <SessionForm
             onSubmitSuccess={() => setRefreshPage(!refreshPage)}
@@ -147,7 +166,7 @@ const CoachDashboard = () => {
 
       {/* Sessions Table */}
       <h2 className="mt-4">Scheduled Sessions</h2>
-      <div className="table-responsive">
+      <div className="sessions-scroll">
         <table className="table table-striped">
           <thead>
             <tr>
@@ -171,14 +190,14 @@ const CoachDashboard = () => {
                   <td>{session.notes}</td>
                   <td>{session.paid ? "Paid" : "Unpaid"}</td>
                   <td>
-                    <button className="btn btn-primary" onClick={() => handleUpdateNotes(session.id)}>
+                    <button className="btn-update" onClick={() => handleUpdateNotes(session.id)}>
                       Update
                     </button>
-                    <button className="btn btn-danger ms-2" onClick={() => handleDeleteSession(session.id)}>
+                    <button className="btn-delete" onClick={() => handleDeleteSession(session.id)}>
                       Delete
                     </button>
                     {!session.paid && (
-                      <button className="btn btn-success ms-2" onClick={() => handlePayment(session.id)}>
+                      <button className="btn-pay" onClick={() => handlePayment(session.id)}>
                         Pay
                       </button>
                     )}

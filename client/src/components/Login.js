@@ -56,10 +56,11 @@ function Login() {
                                 className="form-control" 
                                 id="password" 
                                 value={password} 
-                                onChange={(e) => setPassword(e.target.value)} 
+                                onChange={(e) => setPassword(e.target.value)}
+                                autoComplete="current-password" 
                             />
                         </div>
-                        <button type="submit" className="btn btn-primary w-100">Login</button>
+                        <button type="submit" className="btn-login">Login</button>
                     </form>
                 </div>
             </div>

@@ -16,7 +16,7 @@ function Sessions() {
   }, [BACKEND_URL]);
 
   return (
-    <div>
+    <div class>
       <h1>Sessions</h1>
       {sessions.length > 0 ? (
         <ul style={{ listStyleType: "none", padding: 0 }}>
