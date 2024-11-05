@@ -46,7 +46,7 @@ This is the directory structure:
 │   ├── models.py
 │   ├── config.py
 │   └── seed.py
-└── app.db # SQLite database
+└── app.db # SQLite (db on Render now)
 ```
 ### `Setup`
 
@@ -60,9 +60,10 @@ npm install
 npm start
 
 # Navigate to the server folder /server
-cd ../server 
+cd server 
 
-# Run python seed.py to seed the database
+# If Running on Flask locally. Currently on Render
+# Run python seed.py to seed the database 
 delete app.db then run python seed.py
 
 # Run flask run to start the Flask backend server
