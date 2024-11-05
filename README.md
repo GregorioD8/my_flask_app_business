@@ -26,9 +26,11 @@ This is the directory structure:
 │       │   ├── Calendar.js
 │       │   ├── Clients.js
 │       │   ├── ClientsForm.js
+│       │   ├── CoachCard.js
 │       │   ├── CoachDashboard.js
 │       │   ├── Coaches.js
 │       │   ├── CoachesForm.js
+│       │   ├── CoachesSection.js
 │       │   ├── Home.js
 │       │   ├── Login.js
 │       │   ├── Navbar.js
