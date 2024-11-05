@@ -32,9 +32,12 @@ This is the directory structure:
 │       │   ├── CoachesForm.js
 │       │   ├── CoachesSection.js
 │       │   ├── Home.js
+│       │   ├── LazySection.js
 │       │   ├── Login.js
+│       │   ├── MockPaymentForm.js
 │       │   ├── Navbar.js
 │       │   ├── PrivateRoute.js
+│       │   ├── ServicesSection.js
 │       │   ├── SessionForm.js
 │       │   ├── Sessions.js
 │       └── index.js
