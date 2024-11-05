@@ -1,4 +1,3 @@
-// Home.js
 import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import LazySection from './LazySection';

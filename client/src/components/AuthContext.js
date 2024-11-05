@@ -1,4 +1,3 @@
-// AuthContext.js
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 
 export const AuthContext = createContext();
@@ -38,7 +37,7 @@ export const AuthProvider = ({ children }) => {
         setCoachId(null);
         setCoachName('');
     }, []);
-    
+
     // Define context values with login and logout functions
     return (
         <AuthContext.Provider value={{ isAuthenticated, coachId, coachName, login, logout }}>

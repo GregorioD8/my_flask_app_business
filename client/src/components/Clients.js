@@ -1,4 +1,3 @@
-// Clients.js
 import React, { useState } from "react";
 import ClientsForm from "./ClientsForm";
 
@@ -6,8 +5,8 @@ function Clients({ clients, onClientAdded }) {
   const [selectedClient, setSelectedClient] = useState(null);
 
   const handleClientAdded = (newClient) => {
-    onClientAdded(newClient);
-    setSelectedClient(null);
+    onClientAdded(newClient); // Update parent component with new client
+    setSelectedClient(null); // Reset selected client after addition
   };
 
   return (

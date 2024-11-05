@@ -1,4 +1,3 @@
-// LazySection.js
 import React, { useState, useEffect, useRef } from 'react';
 
 function LazySection({ children, placeholder = "Loading...", rootMargin = '100px', minHeight = '100vh' }) {
