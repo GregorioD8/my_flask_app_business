@@ -167,3 +167,5 @@ The database entities (i.e., `Coach`, `Client`, and `Session` models) map to the
    - The `Clients` component retrieves and displays all the clients that a coach works with. The `ClientsForm` allows the coach to add new clients.
 
 This relationship between the Flask models and React components helps ensure smooth data flow between the backend (API and database) and frontend (UI).
+
+I learned how to use PostgreSQL and AWS in this project
