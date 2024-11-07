@@ -49,6 +49,20 @@ This is the directory structure:
 └── app.db # SQLite (db on Render now)
 ```
 ### `Setup`
+### Running on Flask Locally
+
+To run this project on Flask locally, follow these steps to set up your `.env` file:
+
+1. **Create a `.env` file**  
+   In the root directory of the project, create a new file named `.env`.
+
+2. **Add Environment Variables**  
+   Copy the following lines into your `.env` file, adjusting the values as needed:
+
+   ```plaintext
+   FLASK_DEBUG=1                   # Set to 1 for development, 0 for production
+   SECRET_KEY=your_secret_key       # Replace with a secure key, e.g., use `python -c 'import secrets; print(secrets.token_hex(16))'` to generate one
+   DATABASE_URI=your_database_url   # Replace with the local or testing database URI (e.g., `postgresql://username:password@localhost/db_name`)
 
 # Run cd client to cd into the client folder /client
 cd client
@@ -62,7 +76,6 @@ npm start
 # Navigate to the server folder /server
 cd server 
 
-# If Running on Flask locally. Currently on Render
 # Run python seed.py to seed the database 
 delete app.db then run python seed.py
 
